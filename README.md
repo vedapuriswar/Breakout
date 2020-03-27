@@ -1,4 +1,6 @@
 # Breakout
 A Replica of Atari Breakout created using pygame
 
-Run main.py and press SPACEBAR to start the game
+Run main.py
+
+Hit SPACEBAR to start the game
