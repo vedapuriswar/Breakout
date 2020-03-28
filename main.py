@@ -34,7 +34,7 @@ STATE_GAME_OVER = 3
 
 """Colors"""
 backgroundColor = [72, 75, 79]
-brickColor = [255, 255, 0]
+brickColor = [0, 255, 0]
 paddleColor = [255, 255, 255]
 ballColor = [0, 255, 255]
 
