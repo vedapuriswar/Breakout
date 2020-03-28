@@ -45,11 +45,35 @@ class Game:
         pygame.display.set_caption('Breakout')
         self.FPSClock = pygame.time.Clock()
         self.display = pygame.display.set_mode([width, height])
-        self.init_game()
         self.state = STATE_BALL_IN_PADDLE
+        self.player = paddle.Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleColor)
+        self.ball = ball.Ball(paddleX + paddleX / 2, paddleY - ballRadius, ballRadius, [5, -5], maxBallX, maxBallY, ballColor)
+        self.bricks = Block.Block(brickWidth, brickHeight, brickColor)
+        FPS = 60
+        gameOver = False
+        while not gameOver:
+            for event in pygame.event.get():
+                if event.type is pygame.QUIT:
+                    gameOver = True
+            self.display.fill(backgroundColor)
+            mouseX = pygame.mouse.get_pos()[0]
+            self.check_start()
+            if self.state is STATE_PLAYING:
+                self.ball.move(self.display)
+                self.collisions()
+                self.player.draw(self.display)
+                self.bricks.draw_blocks(self.display)
+                self.ball.draw(self.display)
+            elif self.state is STATE_GAME_OVER:
+                gameOver = True
+            elif self.state is STATE_WON:
+                gameOver = True
+            self.player.move(mouseX)
+            pygame.display.flip()
+            pygame.display.update()
+            self.FPSClock.tick(FPS)
 
-
-    def check_input(self):
+    def check_start(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             self.state = STATE_PLAYING
@@ -70,34 +94,4 @@ class Game:
         elif self.ball.sphere.top > self.player.paddle.top:
             self.state = STATE_GAME_OVER
 
-
-    def init_game(self):
-        self.player = paddle.Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleColor)
-        self.ball = ball.Ball(paddleX + paddleX/2, paddleY - ballRadius, ballRadius, [5, -5], maxBallX, maxBallY, ballColor)
-        self.bricks = Block.Block(brickWidth, brickHeight, brickColor)
-
-    def run(self):
-        FPS = 60
-        gameOver = False
-        while not gameOver:
-            for event in pygame.event.get():
-                if event.type is pygame.QUIT:
-                    gameOver = True
-            self.display.fill(backgroundColor)
-            mouseX = pygame.mouse.get_pos()[0]
-            self.check_input()
-            if self.state is STATE_PLAYING:
-                self.ball.move(self.display)
-                self.collisions()
-                self.player.draw(self.display)
-                self.bricks.draw_blocks(self.display)
-                self.ball.draw(self.display)
-            elif self.state is STATE_GAME_OVER:
-                gameOver = True
-            elif self.state is STATE_WON:
-                gameOver = True
-            self.player.move(mouseX)
-            pygame.display.flip()
-            pygame.display.update()
-            self.FPSClock.tick(FPS)
-Game().run()
+Game()
